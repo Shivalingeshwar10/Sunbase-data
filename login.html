@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            max-width: 300px;
+            margin: 0px auto;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a060;
+        }
+    </style>
+</head>
+<body>
+    <form id="loginForm">
+        <h1>Login</h1>
+        <label for="login_id">Email:</label>
+        <input type="text" id="login_id" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br>
+
+        <button type="button" onclick="authenticateUser()">Login</button>
+    </form>
+
+    <script>
+        function authenticateUser() {
+            const loginId = document.getElementById("login_id").value;
+            const password = document.getElementById("password").value;
+
+            const url = "https://qa2.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp";
+            const body = {
+                "login_id": loginId,
+                "password": password
+            };
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Authentication failed");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Save the bearer token for further API calls
+                const token = data.token;
+                // Redirect to the Customer List Screen or perform other actions
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Authentication failed. Please try again.");
+            });
+        }
+    </script>
+</body>
+</html>
